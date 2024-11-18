@@ -21,4 +21,11 @@ typedef struct {
  */
 board_t* create_board(uint8_t size);
 
+/*
+ * The following function frees the allocation of the player's board.
+ * Input: A pointer to the players board.
+ * Output: None.
+ */
+void free_board(board_t* p_board);
+
 #endif /* BOARD_H */

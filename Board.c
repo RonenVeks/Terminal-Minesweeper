@@ -117,3 +117,11 @@ allocation_error:
 	printf("%sERROR:%s Memory allocation failed\n", KRED, RESET);
 	return NULL;
 }
+
+void 
+free_board(board_t* p_board) {
+	for (uint8_t row = 0; row < p_board->size; row++)
+		free(p_board->matrix[row]);
+	free(p_board->matrix);
+	free(p_board);
+}
