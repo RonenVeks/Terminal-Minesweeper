@@ -125,3 +125,14 @@ free_board(board_t* p_board) {
 	free(p_board->matrix);
 	free(p_board);
 }
+
+void 
+display_board(board_t* p_board) {
+	uint8_t column;
+
+	for (uint8_t row = 0; row < p_board->size; row++) {
+		for (column = 0; column < p_board->size; column++)
+			display_cell(p_board->matrix[row][column]);
+		printf("\n");
+	}
+}

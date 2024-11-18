@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #define CLEAR_TERMINAL system("cls");
+#define MARKED_ASCII (char)(178)
 
 /* Keyboard key ascii */
 #define ENTER_ASCII 13
@@ -31,5 +32,12 @@ typedef struct {
 	bool hidden, flagged, marked;
 	uint8_t nearby_bombs, row, column;
 } cell_t;
+
+/*
+ * The following function prints a given individual cell with the correct symbol and color.
+ * Input: The cell that will be printed out.
+ * Output: None.
+ */
+void display_cell(cell_t cell);
 
 #endif /* CELL_H */

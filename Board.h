@@ -28,4 +28,11 @@ board_t* create_board(uint8_t size);
  */
 void free_board(board_t* p_board);
 
+/*
+ * The following function prints every cell on the board with the correct color and symbol.
+ * Input: A pointer to the player's board.
+ * Output: None.
+ */
+void display_board(board_t* p_board);
+
 #endif /* BOARD_H */
