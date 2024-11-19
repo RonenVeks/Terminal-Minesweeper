@@ -35,4 +35,11 @@ void free_board(board_t* p_board);
  */
 void display_board(board_t* p_board);
 
+/*
+ * The following funcion changes the marked cell of the board to another location. 
+ * Input: A pointer to the player's board and the row and the column of the new mark.
+ * Output: None.
+ */
+void change_mark(board_t* p_board, uint8_t row, uint8_t column);
+
 #endif /* BOARD_H */

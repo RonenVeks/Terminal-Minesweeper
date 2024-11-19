@@ -46,13 +46,27 @@ get_board_size() {
 void
 game_loop(board_t* p_board) {
 	bool game = true;
-	uint8_t key;
+	uint8_t key, row, column;
 
 	while (game) {
 		CLEAR_TERMINAL;
+		/* Updating the position of the mark in case of movement */
+		row = p_board->p_mark->row;
+		column = p_board->p_mark->column;
 
 		display_board(p_board);
 		key = _getch();
+
+		/* Arrows movement */
+		if (key == UP_ARROW_ASCII && row > 0)
+			change_mark(p_board, row - 1, column);
+		if (key == DOWN_ARROW_ASCII && row < p_board->size - 1)
+			change_mark(p_board, row + 1, column);
+		if (key == RIGHT_ARROW_ASCII && column < p_board->size - 1)
+			change_mark(p_board, row, column + 1);
+		if (key == LEFT_ARROW_ASCII && column > 0)
+			change_mark(p_board, row, column - 1);
+
 		if (key == ENTER_ASCII)
 			game = false;
 	}

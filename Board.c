@@ -142,3 +142,10 @@ display_board(board_t* p_board) {
 	}
 	printf("%s", RESET);
 }
+
+void 
+change_mark(board_t* p_board, uint8_t row, uint8_t column) {
+	p_board->p_mark->marked = false;
+	p_board->p_mark = & p_board->matrix[row][column];
+	p_board->p_mark->marked = true;
+}
