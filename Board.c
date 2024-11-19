@@ -99,6 +99,8 @@ create_board(uint8_t size) {
 			p_cell->column = column;
 		}
 	}
+	new_board->p_mark = &new_board->matrix[0][0];
+	new_board->p_mark->marked = true;
 
 	/* Putting bombs */
 	srand((unsigned int)time(NULL)); /* Refreshing rand() function seed */

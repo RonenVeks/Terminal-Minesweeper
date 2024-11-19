@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Cell.h"
 
 /*
  * The following function lets the player decide what is their preferred 
@@ -37,8 +38,35 @@ get_board_size() {
 	}
 }
 
+/*
+ * The following function will serve as the game loop.
+ * Input: A pointer to the players board.
+ * Output: None.
+ */
+void
+game_loop(board_t* p_board) {
+	bool game = true;
+	uint8_t key;
+
+	while (game) {
+		CLEAR_TERMINAL;
+
+		display_board(p_board);
+		key = _getch();
+		if (key == ENTER_ASCII)
+			game = false;
+	}
+}
+
+/* Main function. */
 int
 main(void) {
-	printf("Hello World\n");
+	uint8_t board_size = get_board_size();
+	board_t* p_board = create_board(board_size);
+	if (!p_board)
+		return EXIT_FAILURE;
+
+	game_loop(p_board);
+	free_board(p_board);
 	return EXIT_SUCCESS;
 }
