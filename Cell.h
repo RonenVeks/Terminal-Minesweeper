@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <conio.h>
 
-#define CLEAR_TERMINAL system("cls");
+#define CLEAR_TERMINAL system("cls")
 #define MARKED_ASCII (char)(178)
 
 /* Keyboard key ascii */

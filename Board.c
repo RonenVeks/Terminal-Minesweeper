@@ -20,13 +20,14 @@ size_to_bombs(uint8_t size) {
 /*
  * The following function puts all the pointers of the cell surrounding an individual
  * single cell and returns the amount of cells around this individual cell.
- * Input: A pointer to the player's board, the central cell and the array the surrounding 
- * cells will be stored at.
+ * Input: A pointer to the player's board, a pointer to the central cell and  
+ * the array the surrounding cells will be stored at.
  * Output: The amount of cells around the central cell.
  */
 static uint8_t
-get_surrounding_cells(board_t* p_board, cell_t center, cell_t* surroundings[MAX_SURROUNDINGS]) {
-	uint8_t index = 0, row = center.row, column = center.column;
+get_surrounding_cells(board_t* p_board, cell_t* center, cell_t* surroundings[MAX_SURROUNDINGS]) {
+	uint8_t index = 0;
+	int8_t row = center->row, column = center->column;
 
 	if (row > 0) {
 		surroundings[index++] = &p_board->matrix[row - 1][column];
@@ -94,6 +95,8 @@ create_board(uint8_t size) {
 			p_cell->flagged = false;
 			p_cell->marked = false;
 			p_cell->nearby_bombs = 0;
+			p_cell->row = row;
+			p_cell->column = column;
 		}
 	}
 
@@ -104,7 +107,7 @@ create_board(uint8_t size) {
 
 		if (p_cell->status == WATER) {
 			p_cell->status = BOMB;
-			cells_found = get_surrounding_cells(new_board, *p_cell, surroundings);
+			cells_found = get_surrounding_cells(new_board, p_cell, surroundings);
 			for (cell_index = 0; cell_index < cells_found; cell_index++)
 				surroundings[cell_index]->nearby_bombs++;
 			bombs_put++;
@@ -135,4 +138,5 @@ display_board(board_t* p_board) {
 			display_cell(p_board->matrix[row][column]);
 		printf("\n");
 	}
+	printf("%s", RESET);
 }
