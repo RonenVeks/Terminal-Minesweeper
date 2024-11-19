@@ -45,14 +45,16 @@ get_board_size() {
 void
 game_loop(board_t* p_board) {
 	bool game = true;
-	uint8_t key, row, column;
+	uint8_t key, row, column, flags_left = p_board->bombs_amount;
 
 	while (game) {
 		CLEAR_TERMINAL;
 		/* Updating the position of the mark in case of movement */
 		row = p_board->p_mark->row;
 		column = p_board->p_mark->column;
+		cell_t* p_mark = p_board->p_mark;
 
+		printf("%sFlags Left: %d\n\n", KRED, flags_left);
 		display_board(p_board);
 		printf("%s(F) Put a flag %s(O) Open a cell %s(E) Exit game%s\n", KRED, KBLU, KMAG, RESET);
 		key = _getch();
@@ -67,18 +69,23 @@ game_loop(board_t* p_board) {
 		else if (key == LEFT_ARROW_ASCII && column > 0)
 			change_mark(p_board, row, column - 1);
 		/* Board activities */
-		else {
-			switch (key) {
+		else switch (key) {
 				case 'f':
 				case 'F':
-					p_board->p_mark->flagged = !p_board->p_mark->flagged;
+					if (!p_mark->flagged && flags_left > 0) {
+						p_mark->flagged = true;
+						flags_left--;
+					}
+					else if (p_mark->flagged && flags_left < p_board->bombs_amount) {
+						p_mark->flagged = false;
+						flags_left++;
+					}
 					break;
 				case 'e':
 				case 'E':
 					game = false;
 					break;
 				default: break;
-			}
 		}
 	}
 }
