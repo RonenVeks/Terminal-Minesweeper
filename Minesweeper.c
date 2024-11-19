@@ -1,5 +1,4 @@
 #include "Board.h"
-#include "Cell.h"
 
 /*
  * The following function lets the player decide what is their preferred 
@@ -55,20 +54,32 @@ game_loop(board_t* p_board) {
 		column = p_board->p_mark->column;
 
 		display_board(p_board);
+		printf("%s(F) Put a flag %s(O) Open a cell %s(E) Exit game%s\n", KRED, KBLU, KMAG, RESET);
 		key = _getch();
 
 		/* Arrows movement */
 		if (key == UP_ARROW_ASCII && row > 0)
 			change_mark(p_board, row - 1, column);
-		if (key == DOWN_ARROW_ASCII && row < p_board->size - 1)
+		else if (key == DOWN_ARROW_ASCII && row < p_board->size - 1)
 			change_mark(p_board, row + 1, column);
-		if (key == RIGHT_ARROW_ASCII && column < p_board->size - 1)
+		else if (key == RIGHT_ARROW_ASCII && column < p_board->size - 1)
 			change_mark(p_board, row, column + 1);
-		if (key == LEFT_ARROW_ASCII && column > 0)
+		else if (key == LEFT_ARROW_ASCII && column > 0)
 			change_mark(p_board, row, column - 1);
-
-		if (key == ENTER_ASCII)
-			game = false;
+		/* Board activities */
+		else {
+			switch (key) {
+				case 'f':
+				case 'F':
+					p_board->p_mark->flagged = !p_board->p_mark->flagged;
+					break;
+				case 'e':
+				case 'E':
+					game = false;
+					break;
+				default: break;
+			}
+		}
 	}
 }
 
