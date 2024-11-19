@@ -132,12 +132,13 @@ free_board(board_t* p_board) {
 }
 
 void 
-display_board(board_t* p_board) {
+display_board(board_t* p_board, bool show) {
 	uint8_t column;
 
 	for (uint8_t row = 0; row < p_board->size; row++) {
-		for (column = 0; column < p_board->size; column++)
-			display_cell(p_board->matrix[row][column]);
+		for (column = 0; column < p_board->size; column++) {
+			display_cell(p_board->matrix[row][column], show);
+		}
 		printf("\n");
 	}
 	printf("%s", RESET);

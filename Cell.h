@@ -36,9 +36,10 @@ typedef struct {
 
 /*
  * The following function prints a given individual cell with the correct symbol and color.
- * Input: The cell that will be printed out.
+ * Input: The cell that will be printed out and a boolean that indicates whether
+ * or not to show the cell regarless of it's state.
  * Output: None.
  */
-void display_cell(cell_t cell);
+void display_cell(cell_t cell, bool show);
 
 #endif /* CELL_H */

@@ -55,7 +55,7 @@ game_loop(board_t* p_board) {
 		cell_t* p_mark = p_board->p_mark;
 
 		printf("%sFlags Left: %d\n\n", KRED, flags_left);
-		display_board(p_board);
+		display_board(p_board, false);
 		printf("%s(F) Put a flag %s(O) Open a cell %s(E) Exit game%s\n", KRED, KBLU, KMAG, RESET);
 		key = _getch();
 

@@ -29,11 +29,13 @@ board_t* create_board(uint8_t size);
 void free_board(board_t* p_board);
 
 /*
- * The following function prints every cell on the board with the correct color and symbol.
- * Input: A pointer to the player's board.
+ * The following function prints every cell on the board with the correct color and symbol,
+ * and will even show the entire board in case of winning or losing.
+ * Input: A pointer to the player's board and a boolean that indicates whether
+ * or not to show the entire board.
  * Output: None.
  */
-void display_board(board_t* p_board);
+void display_board(board_t* p_board, bool show);
 
 /*
  * The following funcion changes the marked cell of the board to another location. 
