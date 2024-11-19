@@ -81,6 +81,11 @@ game_loop(board_t* p_board) {
 						flags_left++;
 					}
 					break;
+				case 'o':
+				case 'O':
+					if (p_mark->nearby_bombs == 0)
+						open_empty_cell(p_board, p_mark);
+					break;
 				case 'e':
 				case 'E':
 					game = false;

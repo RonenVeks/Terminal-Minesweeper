@@ -42,4 +42,12 @@ void display_board(board_t* p_board);
  */
 void change_mark(board_t* p_board, uint8_t row, uint8_t column);
 
+/*
+ * The following function opens an every empty cell in a recursive way, as minesweeper
+ * is supposed to do.
+ * Input: A pointer to the player's board and a pointer to the clicked cell.
+ * Output: None.
+ */
+void open_empty_cell(board_t* p_board, cell_t* p_cell);
+
 #endif /* BOARD_H */

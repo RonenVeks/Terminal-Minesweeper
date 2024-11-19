@@ -149,3 +149,17 @@ change_mark(board_t* p_board, uint8_t row, uint8_t column) {
 	p_board->p_mark = & p_board->matrix[row][column];
 	p_board->p_mark->marked = true;
 }
+
+void 
+open_empty_cell(board_t* p_board, cell_t* p_cell) {
+	if (p_cell->hidden) {
+		p_cell->hidden = false;
+		if (p_cell->nearby_bombs == 0) {
+			cell_t* surroundings[MAX_SURROUNDINGS];
+			uint8_t found = get_surrounding_cells(p_board, p_cell, surroundings);
+			for (uint8_t cell_index = 0; cell_index < found; cell_index++)
+				open_empty_cell(p_board, surroundings[cell_index]);
+		}
+
+	}
+}
