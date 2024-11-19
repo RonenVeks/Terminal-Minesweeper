@@ -163,3 +163,27 @@ open_empty_cell(board_t* p_board, cell_t* p_cell) {
 
 	}
 }
+
+void 
+open_numbered_cell(board_t* p_board, cell_t* p_cell) {
+	if (p_cell->hidden)
+		p_cell->hidden = false;
+	else {
+		cell_t* surroundings[MAX_SURROUNDINGS];
+		uint8_t found = get_surrounding_cells(p_board, p_cell, surroundings), count = 0, cell_index;
+
+		/* Counting the flags surrounding the numbered cell */
+		for (cell_index = 0; cell_index < found; cell_index++)
+			if (surroundings[cell_index]->flagged) count++;
+
+		if (p_cell->nearby_bombs == count)
+			for (cell_index = 0; cell_index < found; cell_index++)
+				if (surroundings[cell_index]->status == WATER) {
+					if (surroundings[cell_index]->nearby_bombs == 0)
+						open_empty_cell(p_board, surroundings[cell_index]);
+
+					else if (surroundings[cell_index]->hidden)
+						surroundings[cell_index]->hidden = false;
+				}
+	}
+}
