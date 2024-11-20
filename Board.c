@@ -160,6 +160,18 @@ change_mark(board_t* p_board, uint8_t row, uint8_t column) {
 	p_board->p_mark->marked = true;
 }
 
+void
+open_cell(board_t* p_board, cell_t* p_cell) {
+	if (!p_cell->flagged) {
+		if (p_cell->status == BOMB)
+			printf("TODO FINISH GAME LOST\n");
+		else if (p_cell->nearby_bombs == 0)
+			open_empty_cell(p_board, p_cell);
+		else
+			open_numbered_cell(p_board, p_cell);
+	}
+}
+
 void 
 open_empty_cell(board_t* p_board, cell_t* p_cell) {
 	if (p_cell->hidden && !p_cell->flagged) {
@@ -175,7 +187,7 @@ open_empty_cell(board_t* p_board, cell_t* p_cell) {
 }
 
 void 
-open_numbered_cell(board_t* p_board, cell_t* p_cell, bool* p_game) {
+open_numbered_cell(board_t* p_board, cell_t* p_cell) {
 	if (p_cell->hidden)
 		p_cell->hidden = false;
 	else {
@@ -187,18 +199,14 @@ open_numbered_cell(board_t* p_board, cell_t* p_cell, bool* p_game) {
 			if (surroundings[cell_index]->flagged) count++;
 
 		if (p_cell->nearby_bombs == count)
-			for (cell_index = 0; cell_index < found; cell_index++) {
+			for (cell_index = 0; cell_index < found; cell_index++)
 				if (surroundings[cell_index]->status == WATER) {
 					if (surroundings[cell_index]->nearby_bombs == 0)
 						open_empty_cell(p_board, surroundings[cell_index]);
+
 					else if (surroundings[cell_index]->hidden)
 						surroundings[cell_index]->hidden = false;
 				}
-				else if (!surroundings[cell_index]->flagged) {
-					*p_game = false;
-					finish_game(p_board, false);
-				}
-			}
 	}
 }
 
@@ -209,12 +217,4 @@ check_win(board_t* p_board) {
 			return false;
 
 	return true;
-}
-
-void 
-finish_game(board_t* p_board, bool win) {
-	CLEAR_TERMINAL;
-	win ? printf("%sYOU WON!!!%s\n\n", KGRN, RESET) :
-		printf("%sYOU LOST...%s\n\n", KRED, RESET);
-	display_board(p_board, true);
 }

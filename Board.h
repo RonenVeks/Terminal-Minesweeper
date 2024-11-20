@@ -45,6 +45,14 @@ void display_board(board_t* p_board, bool show);
 void change_mark(board_t* p_board, uint8_t row, uint8_t column);
 
 /*
+ * The following function will navigate to the correct function according to what
+ * cell on the board was clicked.
+ * Input: A pointer to the player's board and a pointer to the clicked cell.
+ * Output: None.
+ */
+void open_cell(board_t* p_board, cell_t* p_cell);
+
+/*
  * The following function opens an every empty cell in a recursive way, as minesweeper
  * is supposed to do.
  * Input: A pointer to the player's board and a pointer to the clicked cell.
@@ -54,11 +62,10 @@ void open_empty_cell(board_t* p_board, cell_t* p_cell);
 
 /*
  * The following function opens a numbered cell according to it's visibility. 
- * Input: A pointer to the player's board, a pointer to the clicked cell and a 
- * pointer to the boolean value that controls the game loop.
+ * Input: A pointer to the player's board and a pointer to the clicked cell.
  * Output: None.
  */
-void open_numbered_cell(board_t* p_board, cell_t* p_cell, bool* p_game);
+void open_numbered_cell(board_t* p_board, cell_t* p_cell);
 
 /*
  * The following function will iterate through the array of bombs to check 
@@ -67,13 +74,5 @@ void open_numbered_cell(board_t* p_board, cell_t* p_cell, bool* p_game);
  * Output: A boolean value that indicates whether or not the player won.
  */
 bool check_win(board_t* p_board);
-
-/*
- * The following function will put an end screen for winning or losing the game.
- * Input: A pointer to the player's board and  aboolean value that 
- * indicates whether or not the player won.
- * Output: None.
- */
-void finish_game(board_t* p_board, bool win);
 
 #endif /* BOARD_H */
