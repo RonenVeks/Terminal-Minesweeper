@@ -73,13 +73,11 @@ game_loop(board_t* p_board) {
 		else switch (key) {
 				case 'f':
 				case 'F':
-					if (!p_mark->flagged && flags_left > 0) {
+					if (p_mark->hidden && !p_mark->flagged && flags_left > 0) {
 						p_mark->flagged = true;
 						flags_left--;
 						if (flags_left == 0 && check_win(p_board)) {
-							CLEAR_TERMINAL;
-							printf("%sYOU WON!!!%s\n\n", KGRN, RESET);
-							display_board(p_board, true);
+							finish_game(p_board, true);
 							game = false;
 						}
 					}
@@ -100,7 +98,7 @@ game_loop(board_t* p_board) {
 						else if (p_mark->nearby_bombs == 0)
 							open_empty_cell(p_board, p_mark);
 						else
-							open_numbered_cell(p_board, p_mark);
+							open_numbered_cell(p_board, p_mark, &game);
 					}
 					break;
 				case 'e':
