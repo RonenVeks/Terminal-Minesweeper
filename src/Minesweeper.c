@@ -1,5 +1,4 @@
 #include "Board.h"
-#include "Cell.h"
 
 /*
  * The following function lets the player decide what is their preferred 
