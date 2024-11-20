@@ -9,9 +9,9 @@
 #define MAX_SURROUNDINGS 8
 
 typedef struct {
-	cell_t** matrix;
+	cell_t** matrix, *p_mark, **bombs;
 	uint8_t size, bombs_amount;
-	cell_t* p_mark;
+	//cell_t* p_mark;
 } board_t;
 
 /*
@@ -45,6 +45,14 @@ void display_board(board_t* p_board, bool show);
 void change_mark(board_t* p_board, uint8_t row, uint8_t column);
 
 /*
+ * The following function will navigate to the correct function according to what
+ * cell on the board was clicked.
+ * Input: A pointer to the player's board and a pointer to the clicked cell.
+ * Output: None.
+ */
+void open_cell(board_t* p_board, cell_t* p_cell);
+
+/*
  * The following function opens an every empty cell in a recursive way, as minesweeper
  * is supposed to do.
  * Input: A pointer to the player's board and a pointer to the clicked cell.
@@ -58,5 +66,13 @@ void open_empty_cell(board_t* p_board, cell_t* p_cell);
  * Output: None.
  */
 void open_numbered_cell(board_t* p_board, cell_t* p_cell);
+
+/*
+ * The following function will iterate through the array of bombs to check 
+ * if each one of the bombs has a flag on it.
+ * Input: A pointer to the player's board.
+ * Output: A boolean value that indicates whether or not the player won.
+ */
+bool check_win(board_t* p_board);
 
 #endif /* BOARD_H */

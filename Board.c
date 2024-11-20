@@ -69,9 +69,17 @@ create_board(uint8_t size) {
 		return NULL;
 	}
 
+	/* Allocating the bombs array */
+	new_board->bombs = (cell_t**)calloc(new_board->bombs_amount, sizeof(cell_t*));
+	if (!new_board->bombs) {
+		free(new_board);
+		goto allocation_error;
+	}
+
 	/* Allocating matrix */
 	new_board->matrix = (cell_t**)calloc(size, sizeof(cell_t*));
 	if (!new_board->matrix) {
+		free(new_board->bombs);
 		free(new_board);
 		goto allocation_error;
 	}
@@ -83,6 +91,7 @@ create_board(uint8_t size) {
 			for (uint8_t temp = 0; temp < row; temp++)
 				free(new_board->matrix[temp]);
 			free(new_board->matrix);
+			free(new_board->bombs);
 			free(new_board);
 			goto allocation_error;
 		}
@@ -106,6 +115,7 @@ create_board(uint8_t size) {
 	srand((unsigned int)time(NULL)); /* Refreshing rand() function seed */
 	while (bombs_put < new_board->bombs_amount) {
 		p_cell = &new_board->matrix[rand() % size][rand() % size];
+		new_board->bombs[bombs_put] = p_cell; /* Putting the bombs into the array */
 
 		if (p_cell->status == WATER) {
 			p_cell->status = BOMB;
@@ -115,7 +125,6 @@ create_board(uint8_t size) {
 			bombs_put++;
 		}
 	}
-
 	return new_board;
 
 allocation_error:
@@ -128,6 +137,7 @@ free_board(board_t* p_board) {
 	for (uint8_t row = 0; row < p_board->size; row++)
 		free(p_board->matrix[row]);
 	free(p_board->matrix);
+	free(p_board->bombs);
 	free(p_board);
 }
 
@@ -136,9 +146,8 @@ display_board(board_t* p_board, bool show) {
 	uint8_t column;
 
 	for (uint8_t row = 0; row < p_board->size; row++) {
-		for (column = 0; column < p_board->size; column++) {
+		for (column = 0; column < p_board->size; column++) 
 			display_cell(p_board->matrix[row][column], show);
-		}
 		printf("\n");
 	}
 	printf("%s", RESET);
@@ -151,9 +160,21 @@ change_mark(board_t* p_board, uint8_t row, uint8_t column) {
 	p_board->p_mark->marked = true;
 }
 
+void
+open_cell(board_t* p_board, cell_t* p_cell) {
+	if (!p_cell->flagged) {
+		if (p_cell->status == BOMB)
+			printf("TODO FINISH GAME LOST\n");
+		else if (p_cell->nearby_bombs == 0)
+			open_empty_cell(p_board, p_cell);
+		else
+			open_numbered_cell(p_board, p_cell);
+	}
+}
+
 void 
 open_empty_cell(board_t* p_board, cell_t* p_cell) {
-	if (p_cell->hidden) {
+	if (p_cell->hidden && !p_cell->flagged) {
 		p_cell->hidden = false;
 		if (p_cell->nearby_bombs == 0) {
 			cell_t* surroundings[MAX_SURROUNDINGS];
@@ -187,4 +208,13 @@ open_numbered_cell(board_t* p_board, cell_t* p_cell) {
 						surroundings[cell_index]->hidden = false;
 				}
 	}
+}
+
+bool
+check_win(board_t* p_board) {
+	for (uint8_t bomb = 0; bomb < p_board->bombs_amount; bomb++)
+		if (!p_board->bombs[bomb]->flagged)
+			return false;
+
+	return true;
 }

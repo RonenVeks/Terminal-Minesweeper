@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Cell.h"
 
 /*
  * The following function lets the player decide what is their preferred 
@@ -75,6 +76,12 @@ game_loop(board_t* p_board) {
 					if (!p_mark->flagged && flags_left > 0) {
 						p_mark->flagged = true;
 						flags_left--;
+						if (flags_left == 0 && check_win(p_board)) {
+							CLEAR_TERMINAL;
+							printf("%sYOU WON!!!%s\n\n", KGRN, RESET);
+							display_board(p_board, true);
+							game = false;
+						}
 					}
 					else if (p_mark->flagged && flags_left < p_board->bombs_amount) {
 						p_mark->flagged = false;
@@ -83,12 +90,18 @@ game_loop(board_t* p_board) {
 					break;
 				case 'o':
 				case 'O':
-					if (p_mark->status == BOMB)
-						game = false;
-					else if (p_mark->nearby_bombs == 0)
-						open_empty_cell(p_board, p_mark);
-					else
-						open_numbered_cell(p_board, p_mark);
+					if (!p_mark->flagged) {
+						if (p_mark->status == BOMB) {
+							CLEAR_TERMINAL;
+							printf("%sYOU LOST...%s\n\n", KRED, RESET);
+							display_board(p_board, true);
+							game = false;
+						}
+						else if (p_mark->nearby_bombs == 0)
+							open_empty_cell(p_board, p_mark);
+						else
+							open_numbered_cell(p_board, p_mark);
+					}
 					break;
 				case 'e':
 				case 'E':
