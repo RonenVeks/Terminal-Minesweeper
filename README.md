@@ -1,5 +1,20 @@
 <img src="https://github.com/RonenVeks/Terminal-Minesweeper/blob/Develop/assets/Readme-Logo.png"/>
 <div align="center"><p>A simple Minesweeper game you can play straight from the terminal!</p></div>
+<br/>
+
+## Installation⬇️
+<p>In order to install the game, run the following command:</p>
+
+```bash
+git clone https://github.com/RonenVeks/Terminal-Minesweeper.git
+```
+<br/>
+
+## Features✨
+- 🌈Color coded UI for better clarity while playing
+- ⌚Real-time board rendering
+- 🎨All design with ascii art
+<br/>
 
 ## 🎮How to play?
 #### <em> Before cloning, make sure GCC is installed on your system. </em>
@@ -9,8 +24,12 @@
 ```bash
 Minesweeper.exe
 ```
-<br/>
 <p>After starting up the game, you'll be welcomed with this screen:</p>
 <img src="https://github.com/RonenVeks/Terminal-Minesweeper/blob/Feature/Add-readme/assets/Readme-Choosing-Screen.png"/>
 <p>In this screen you'll be able to choose your preffered size for the screen using the arrow buttons</p>
+<p>After choosing the size for your board you will be able to play actual game!</p>
+<img src="https://github.com/RonenVeks/Terminal-Minesweeper/blob/Feature/Add-readme/assets/Readme-Game.png"/> 
+<p>You can move the mark on the board using the arrow keys and preform other function with the little insctructions written blow the board</p>
 <br/>
+
+## 🔨How does the game work?
