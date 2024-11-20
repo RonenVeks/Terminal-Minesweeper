@@ -73,7 +73,7 @@ game_loop(board_t* p_board) {
 		else switch (key) {
 				case 'f':
 				case 'F':
-					if (!p_mark->flagged && flags_left > 0) {
+					if (p_mark->hidden && !p_mark->flagged && flags_left > 0) {
 						p_mark->flagged = true;
 						flags_left--;
 						if (flags_left == 0 && check_win(p_board)) {
