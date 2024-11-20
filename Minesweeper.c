@@ -69,8 +69,10 @@ game_loop(board_t* p_board) {
 			change_mark(p_board, row, column + 1);
 		else if (key == LEFT_ARROW_ASCII && column > 0)
 			change_mark(p_board, row, column - 1);
+
 		/* Board activities */
 		else switch (key) {
+				/* Put flag */
 				case 'f':
 				case 'F':
 					if (p_mark->hidden && !p_mark->flagged && flags_left > 0) {
@@ -81,18 +83,20 @@ game_loop(board_t* p_board) {
 							game = false;
 						}
 					}
+					/* Remove flag */
 					else if (p_mark->flagged && flags_left < p_board->bombs_amount) {
 						p_mark->flagged = false;
 						flags_left++;
 					}
 					break;
+				
+				/* Open cell */
 				case 'o':
 				case 'O':
 					if (!p_mark->flagged) {
 						if (p_mark->status == BOMB) {
 							CLEAR_TERMINAL;
-							printf("%sYOU LOST...%s\n\n", KRED, RESET);
-							display_board(p_board, true);
+							finish_game(p_board, false);
 							game = false;
 						}
 						else if (p_mark->nearby_bombs == 0)
@@ -101,10 +105,13 @@ game_loop(board_t* p_board) {
 							open_numbered_cell(p_board, p_mark, &game);
 					}
 					break;
+
+				/* Exit */
 				case 'e':
 				case 'E':
 					game = false;
 					break;
+
 				default: break;
 		}
 	}

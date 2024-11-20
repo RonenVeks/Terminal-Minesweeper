@@ -29,6 +29,9 @@ get_surrounding_cells(board_t* p_board, cell_t* center, cell_t* surroundings[MAX
 	uint8_t index = 0;
 	int8_t row = center->row, column = center->column;
 
+	/* |x|x|x| 
+	   | |o| |
+	   | | | | */
 	if (row > 0) {
 		surroundings[index++] = &p_board->matrix[row - 1][column];
 		if (column > 0)
@@ -36,6 +39,10 @@ get_surrounding_cells(board_t* p_board, cell_t* center, cell_t* surroundings[MAX
 		if (column < p_board->size - 1)
 			surroundings[index++] = &p_board->matrix[row - 1][column + 1];
 	}
+
+	/* | | | | 
+	   | |o| |
+	   |x|x|x| */
 	if (row < p_board->size - 1) {
 		surroundings[index++] = &p_board->matrix[row + 1][column];
 		if (column > 0)
@@ -43,6 +50,10 @@ get_surrounding_cells(board_t* p_board, cell_t* center, cell_t* surroundings[MAX
 		if (column < p_board->size - 1)
 			surroundings[index++] = &p_board->matrix[row + 1][column + 1];
 	}
+	
+	/* | | | | 
+	   |x|o|x|
+	   | | | | */
 	if (column > 0)
 		surroundings[index++] = &p_board->matrix[row][column - 1];
 	if (column < p_board->size - 1)
@@ -108,6 +119,7 @@ create_board(uint8_t size) {
 			p_cell->column = column;
 		}
 	}
+	/* Setting the top left cell as the initial mark*/
 	new_board->p_mark = &new_board->matrix[0][0];
 	new_board->p_mark->marked = true;
 
@@ -164,9 +176,11 @@ void
 open_empty_cell(board_t* p_board, cell_t* p_cell) {
 	if (p_cell->hidden && !p_cell->flagged) {
 		p_cell->hidden = false;
+
 		if (p_cell->nearby_bombs == 0) {
 			cell_t* surroundings[MAX_SURROUNDINGS];
 			uint8_t found = get_surrounding_cells(p_board, p_cell, surroundings);
+
 			for (uint8_t cell_index = 0; cell_index < found; cell_index++)
 				open_empty_cell(p_board, surroundings[cell_index]);
 		}
@@ -191,6 +205,7 @@ open_numbered_cell(board_t* p_board, cell_t* p_cell, bool* p_game) {
 				if (surroundings[cell_index]->status == WATER) {
 					if (surroundings[cell_index]->nearby_bombs == 0)
 						open_empty_cell(p_board, surroundings[cell_index]);
+
 					else if (surroundings[cell_index]->hidden)
 						surroundings[cell_index]->hidden = false;
 				}
@@ -216,5 +231,6 @@ finish_game(board_t* p_board, bool win) {
 	CLEAR_TERMINAL;
 	win ? printf("%sYOU WON!!!%s\n\n", KGRN, RESET) :
 		printf("%sYOU LOST...%s\n\n", KRED, RESET);
+
 	display_board(p_board, true);
 }
