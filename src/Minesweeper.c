@@ -1,5 +1,31 @@
 #include "Board.h"
 
+#define LOGO_LINES_AMOUNT 7
+
+/*
+ * The following function will print out the logo for the board size choosing screen.
+ * Input: A pointer to a randomly generate board for the choosing screen.
+ * Output: None.
+ */
+void print_logo(board_t* p_board) {
+	uint8_t column;
+	const char* logo[LOGO_LINES_AMOUNT] = {
+		" ___ ___  ____  ____     ___  _____   ___    ___  ____    ___  ____  ",
+		"|   T   Tl    j|    \\   /  _]/ ___/  /  _]  /  _]|    \\  /  _]|    \\ ",
+		"| _   _ | |  T |  _  Y /  [_(   \\_  /  [_  /  [_ |  o  )/  [_ |  D  )",
+		"|  \\_/  | |  | |  |  |Y    _]\\__  TY    _]Y    _]|   _/Y    _]|    / ",
+		"|   |   | |  | |  |  ||   [_ /  \\ ||   [_ |   [_ |  |  |   [_ |    \\ ",
+		"|   |   | j  l |  |  ||     T\\    ||     T|     T|  |  |     T|  .  Y",
+		"l___j___j|____jl__j__jl_____j \\___jl_____jl_____jl__j  l_____jl__j\\_j"
+	};
+
+	for (uint8_t row = 0; row < EASY_BOARD_SIZE; row++) {
+		for (column = 0; column < EASY_BOARD_SIZE; column++)
+			display_cell(p_board->matrix[row][column], true);
+		row < LOGO_LINES_AMOUNT ? printf("\t%s%s\n", KGRN, logo[row]) : printf("\n");
+	}
+}
+
 /*
  * The following function lets the player decide what is their preferred 
  * size for the board with a nice keyboard interface. 
@@ -10,10 +36,13 @@ static uint8_t
 get_board_size() {
 	uint8_t option = 1, key;
 	bool chose = false;
+	board_t* logo_board = create_board(EASY_BOARD_SIZE);
 
 	while (!chose) {
 		CLEAR_TERMINAL;
-		printf("%sGame Modes:\n", KMAG);
+		print_logo(logo_board);
+
+		printf("%s\n\nGame Modes:\n", KMAG);
 		option == 1 ? printf("%s -> %s1) %s9 Cells - Easy\n", RESET, KRED, KYEL) :
 			printf("    %s1) %s9 Cells - Easy\n", KRED, KYEL);
 		option == 2 ? printf("%s -> %s2) %s16 Cells - Medium\n", RESET, KRED, KYEL) :
@@ -29,6 +58,8 @@ get_board_size() {
 		else if (key == ENTER_ASCII)
 			chose = true;
 	}
+	free_board(logo_board);
+
 	switch (option) {
 		case 1: return EASY_BOARD_SIZE;
 		case 2: return MEDIUM_BOARD_SIZE;
