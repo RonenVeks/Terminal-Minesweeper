@@ -9,9 +9,9 @@
 #define MAX_SURROUNDINGS 8
 
 typedef struct {
-	cell_t** matrix;
+	cell_t** matrix, *p_mark, **bombs;
 	uint8_t size, bombs_amount;
-	cell_t* p_mark;
+	//cell_t* p_mark;
 } board_t;
 
 /*
@@ -29,10 +29,51 @@ board_t* create_board(uint8_t size);
 void free_board(board_t* p_board);
 
 /*
- * The following function prints every cell on the board with the correct color and symbol.
- * Input: A pointer to the player's board.
+ * The following function prints every cell on the board with the correct color and symbol,
+ * and will even show the entire board in case of winning or losing.
+ * Input: A pointer to the player's board and a boolean that indicates whether
+ * or not to show the entire board.
  * Output: None.
  */
-void display_board(board_t* p_board);
+void display_board(board_t* p_board, bool show);
+
+/*
+ * The following funcion changes the marked cell of the board to another location. 
+ * Input: A pointer to the player's board and the row and the column of the new mark.
+ * Output: None.
+ */
+void change_mark(board_t* p_board, uint8_t row, uint8_t column);
+
+/*
+ * The following function opens an every empty cell in a recursive way, as minesweeper
+ * is supposed to do.
+ * Input: A pointer to the player's board and a pointer to the clicked cell.
+ * Output: None.
+ */
+void open_empty_cell(board_t* p_board, cell_t* p_cell);
+
+/*
+ * The following function opens a numbered cell according to it's visibility. 
+ * Input: A pointer to the player's board, a pointer to the clicked cell and a 
+ * pointer to the boolean value that controls the game loop.
+ * Output: None.
+ */
+void open_numbered_cell(board_t* p_board, cell_t* p_cell, bool* p_game);
+
+/*
+ * The following function will iterate through the array of bombs to check 
+ * if each one of the bombs has a flag on it.
+ * Input: A pointer to the player's board.
+ * Output: A boolean value that indicates whether or not the player won.
+ */
+bool check_win(board_t* p_board);
+
+/*
+ * The following function will put an end screen for winning or losing the game.
+ * Input: A pointer to the player's board and  aboolean value that 
+ * indicates whether or not the player won.
+ * Output: None.
+ */
+void finish_game(board_t* p_board, bool win);
 
 #endif /* BOARD_H */

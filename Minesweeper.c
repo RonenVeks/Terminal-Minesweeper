@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Cell.h"
 
 /*
  * The following function lets the player decide what is their preferred 
@@ -37,8 +38,87 @@ get_board_size() {
 	}
 }
 
+/*
+ * The following function will serve as the game loop.
+ * Input: A pointer to the players board.
+ * Output: None.
+ */
+void
+game_loop(board_t* p_board) {
+	bool game = true;
+	uint8_t key, row, column, flags_left = p_board->bombs_amount;
+
+	while (game) {
+		CLEAR_TERMINAL;
+		/* Updating the position of the mark in case of movement */
+		row = p_board->p_mark->row;
+		column = p_board->p_mark->column;
+		cell_t* p_mark = p_board->p_mark;
+
+		printf("%sFlags Left: %d\n\n", KRED, flags_left);
+		display_board(p_board, false);
+		printf("%s(F) Put a flag %s(O) Open a cell %s(E) Exit game%s\n", KRED, KBLU, KMAG, RESET);
+		key = _getch();
+
+		/* Arrows movement */
+		if (key == UP_ARROW_ASCII && row > 0)
+			change_mark(p_board, row - 1, column);
+		else if (key == DOWN_ARROW_ASCII && row < p_board->size - 1)
+			change_mark(p_board, row + 1, column);
+		else if (key == RIGHT_ARROW_ASCII && column < p_board->size - 1)
+			change_mark(p_board, row, column + 1);
+		else if (key == LEFT_ARROW_ASCII && column > 0)
+			change_mark(p_board, row, column - 1);
+		/* Board activities */
+		else switch (key) {
+				case 'f':
+				case 'F':
+					if (p_mark->hidden && !p_mark->flagged && flags_left > 0) {
+						p_mark->flagged = true;
+						flags_left--;
+						if (flags_left == 0 && check_win(p_board)) {
+							finish_game(p_board, true);
+							game = false;
+						}
+					}
+					else if (p_mark->flagged && flags_left < p_board->bombs_amount) {
+						p_mark->flagged = false;
+						flags_left++;
+					}
+					break;
+				case 'o':
+				case 'O':
+					if (!p_mark->flagged) {
+						if (p_mark->status == BOMB) {
+							CLEAR_TERMINAL;
+							printf("%sYOU LOST...%s\n\n", KRED, RESET);
+							display_board(p_board, true);
+							game = false;
+						}
+						else if (p_mark->nearby_bombs == 0)
+							open_empty_cell(p_board, p_mark);
+						else
+							open_numbered_cell(p_board, p_mark, &game);
+					}
+					break;
+				case 'e':
+				case 'E':
+					game = false;
+					break;
+				default: break;
+		}
+	}
+}
+
+/* Main function. */
 int
 main(void) {
-	printf("Hello World\n");
+	uint8_t board_size = get_board_size();
+	board_t* p_board = create_board(board_size);
+	if (!p_board)
+		return EXIT_FAILURE;
+
+	game_loop(p_board);
+	free_board(p_board);
 	return EXIT_SUCCESS;
 }
