@@ -26,8 +26,8 @@ Minesweeper.exe
 ```
 <p>After starting up the game, you'll be welcomed with this screen:</p>
 <img src="https://github.com/RonenVeks/Terminal-Minesweeper/blob/Feature/Add-readme/assets/Readme-Choosing-Screen.png"/>
-<p>In this screen you'll be able to choose your preffered size for the screen using the arrow buttons</p>
-<p>After choosing the size for your board you will be able to play actual game!</p>
+<p>In this screen you'll be able to choose your preffered size for the board using the arrow keys</p>
+<p>After choosing the size for your board, you'll be able to play actual game!</p>
 <img src="https://github.com/RonenVeks/Terminal-Minesweeper/blob/Feature/Add-readme/assets/Readme-Game.png"/> 
 <p>You can move the mark on the board using the arrow keys and perform other function with the little insctructions written blow the board</p>
 <br/>
