@@ -32,7 +32,7 @@ Minesweeper.exe
 <p>You can move the mark on the board using the arrow keys and perform other function with the little insctructions written blow the board</p>
 <br/>
 
-## 🔨How was it build?
+## 🔨How was it built?
 <img src="https://github.com/RonenVeks/Terminal-Minesweeper/blob/Feature/Add-readme/assets/Readme-code-screenshot.png">
 <p>The entire game was written in the C programming language, emphasizing memory safety.</p>
 <p>All the code is written alongside informative comments, in order to make key-consepts in C easy to understand and beginner friendly.</p>
